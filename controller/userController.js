@@ -1,7 +1,36 @@
-// GET ALL USER LIST
+const bcrypt= require('bcrypt');
+const { registerUser } = require('../model/userModel');
 
-const getUsers = () => {
+const register = async(req,res)=>{
+    console.log(req.body);
+    const {email, mobileNumber, password, confirmPassword} = req.body;
+    if(!email || !mobileNumber || !password || !confirmPassword){
+        return res.status(400).send("Please fill all the required fields");
+    }
 
-}
+    if(password !== confirmPassword){
+return res.status(400).send("Passwords do not match");
+    }
+    try{
+        //Hashing the password with bcrypt: Here 10 is a salt rounds
+        const hashedPassword = await bcrypt.hash(password,10);
 
-module.exports = { getUsers };
+    const query = `INSERT INTO user_verification(email, mobileNumber, password) VALUES(?,?,?)`; 
+    registerUser(email, mobileNumber, hashedPassword, (err,results) => {
+        if(err){
+             console.error("Error inserting data:",err);
+             if(err.code === 'ER_DUP_ENTRY'){
+             return res.status(409).send('Email Already exists'); 
+             }
+                return res.status(500).send("An error ocurred while registering the user");
+            }
+        res.status(201).send("User Registered Successfully");
+        console.log("User Registered Successfully");
+        });
+    }catch (error) {
+        console.error('Error hashing the password:', error);
+        res.status(500).send('AN error occurred during registeration.');
+    }
+    };
+
+    module.exports = { register };

@@ -37,5 +37,10 @@ const createTable = () =>{
 // Call the function to ensure table is created
 createTable();
 
+const registerUser =  (email, mobileNumber, hashedPassword,callback) => {
+const query = `INSERT INTO user_verification(email, mobileNumber, password) VALUES(?,?,?)`; 
+connection.query(query, [email, mobileNumber, hashedPassword], callback);
+};
+
 //Export the functions
-module.exports = { createTable };
+module.exports = { createTable, registerUser };

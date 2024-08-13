@@ -1,15 +1,10 @@
-const express= require('express')
-const { getUsers } = require('../controller/userController')
-
+const express= require('express');
 //router object
-const router = express.Router()
-
+const router = express.Router();
+const { register } = require('../controller/userController');
 
 //routes
+router.post('/register', register);
 
 
-//GET ALL USER LISTS || GET
-router.get('/list', getUsers);
-
-
-module.exports = router
+module.exports = router;
