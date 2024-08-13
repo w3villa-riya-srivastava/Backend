@@ -1,21 +1,21 @@
 //config/dbconfig.js
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2");
 const dotenv = require("dotenv");
 dotenv.config();
+const{ DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
-const pool= mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'riya',
-    database:'jasmine'
-
+const db = mysql.createConnection({
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database:DB_NAME
 });
 
 //create database connection
-pool.query('select 1').then(()=>{
-    console.log("my sql database connected")
-}).catch((error)=>{
-    console.log(error);
-})
 
-module.exports = pool;
+db.connect((err) => {
+    if (err) throw err;
+    console.log(`${DB_NAME} Database Connected Successfully`);
+});
+
+module.exports = db;
