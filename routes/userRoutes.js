@@ -5,7 +5,7 @@ const { registerValidation, validate} = require('../helpers/validations');
 const { register } = require('../controller/userController');
 
 //routes
-router.post('/register', register, registerValidation, validate);
+router.post('/register', registerValidation,register );
 
 
 module.exports = router;

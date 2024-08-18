@@ -1,12 +1,18 @@
 const bcrypt= require('bcrypt');
 const { registerUser } = require('../model/userModel');
+const { validationResult } = require('express-validator');
 
 const register = async(req,res)=>{
-    console.log(req.body);
-    const {email, mobileNumber, password, confirmPassword} = req.body;
-    if(!email || !mobileNumber || !password || !confirmPassword){
-        return res.status(400).send("Please fill all the required fields");
+
+    const errors =validationResult(req)
+    if (!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() });
     }
+    // console.log(req.body);
+    // const {email, mobileNumber, password, confirmPassword} = req.body;
+    // if(!email || !mobileNumber || !password || !confirmPassword){
+    //     return res.status(400).send("Please fill all the required fields");
+    // }
 
 //     if(password !== confirmPassword){
 // return res.status(400).send("Passwords do not match");
